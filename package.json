@@ -1,0 +1,31 @@
+{
+  "name": "webrtc-live-system",
+  "version": "1.0.0",
+  "description": "基于 webrtc 的流媒体直播系统",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kevinnan-teen/webrtc-live-system.git"
+  },
+  "keywords": [
+    "webrtc"
+  ],
+  "author": "nachr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kevinnan-teen/webrtc-live-system/issues"
+  },
+  "homepage": "https://github.com/Kevinnan-teen/webrtc-live-system#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.1.1",
+    "koa-static": "^5.0.0",
+    "koa-views": "^8.0.0",
+    "socket.io": "^4.4.1"
+  }
+}
