@@ -68,6 +68,7 @@ io.on("connection", socket => {
 
     socket.on('disconnect', () => {
         var user = users.removeUser(socket.id);
+        io.to(user.room).emit('updateUserList', users.getUserList(user.room));
         console.log('user disconnected');
     });
 
