@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>webrtc-live-system</title>
+<link rel="stylesheet" href="./layui/css/layui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">LIVE SYSTEM</a>
+          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>  
+            </ul>
+          </div> -->
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="user_signin">未登录</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/signin">sign in</a></li>
+              <li><a class="dropdown-item" href="/profile">profile</a></li>
+              <li><a class="dropdown-item" href="/api/signout" id="signout_a">sign out</a></li>              
+            </ul>
+          </li>
+        </div>
+      </nav>
+    <!-- 内容主体区域 -->
+      <div style="padding-top: 3%; padding-right:20%; padding-left:20%;">
+          <div class="container-fluid text-center">
+              
+              <!-- <h4>What we offer</h4>
+              <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+              </nav> -->
+              <div class="container">
+                <h2>Account overview</h2>
+                <br>
+                <div class="row align-items-start">
+                  <div class="col">        
+                  </div>
+                  <div class="col">
+                    用户ID
+                  </div>
+                  <div class="col"> 
+                  </div>
+                  <div class="col" id="user_id">
+                  </div>
+                  <div class="col">
+                  </div>
+                </div>
+                <br>
+                <div class="row align-items-start">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                      用户名
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col" id="user_name">
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <br>
+                <div class="row align-items-start">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                      创建时间
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col" id="created_at">                      
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <br>
+                
+                <div class="row align-items-start" id="apply_anchor_button_div" style="display: none;">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                        <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="apply_anchor_button">申请成为主播</button>
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                      
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <br>
+                <div class="row align-items-start" id="room_id_div" style="display: none;">
+                    <div class="col">
+                    </div>
+                    <div class="col", id="">
+                      直播间ID
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col" id="room_id">
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <br>
+                <div class="row align-items-start" id="room_title_div" style="display: none;">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                      直播间标题
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col" id="room_title">
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div id="form_div" style="display: none; width: 100%;">
+                    <form class="layui-form" action="">
+                        <!-- <div class="layui-form-item layui-form-text"> <label class="layui-form-label"></label>
+                            <div class="layui-input-block"> <textarea placeholder="更改直播间标题" class="layui-textarea"></textarea>
+                            </div>
+                        </div> -->
+                        <div class="layui-form-item"> <label class="layui-form-label"></label>
+                            <div class="layui-input-block">
+                             <input type="text" name="new_room_title" lay-verify="title" autocomplete="off" placeholder="更改直播间标题" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                              <button class="layui-btn" lay-submit lay-filter="modifyRoomTitle">更改</button>
+                              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+              </div>    
+          </div>        
+      </div>
+</div>
+
+<script src="./layui/layui.js"></script>
+  <script>
+    function getCookie(cname)
+    {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0; i<ca.length; i++) 
+      {
+        var c = ca[i].trim();
+        if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+      }
+      return "";
+    }
+    
+    function setUserInfo($, data){
+      document.getElementById('user_id').innerHTML    = data['user_id'];
+      document.getElementById('user_name').innerHTML  = data['user_name'];
+      document.getElementById('created_at').innerHTML = data['created_at'].split(' ')[0];
+     
+      if(data['room_id']){
+        $('#apply_anchor_button_div').hide();
+        $('#room_id_div').show();
+        $('#room_title_div').show();
+        $('#form_div').show();
+
+        document.getElementById('room_id').innerHTML    = data['room_id'];
+        document.getElementById('room_title').innerHTML = data['room_title'];
+
+      }
+      else{
+        $('#apply_anchor_button_div').show();
+        $('#room_id_div').hide();
+        $('#room_title_div').hide();
+        $('#form_div').hide();
+      }
+    }
+    
+    layui.use(['form'], function(){
+      $ = layui.$;
+      $('#apply_anchor_button').click(function(event){
+        window.location.href = '/apply_anchor';
+      });
+      $('#signout_a').click(function(event){
+        document.cookie="user_name=未登录";
+      })      
+      document.getElementById('user_signin').innerHTML = getCookie('user_name');
+
+      layui.$.ajax({
+        url : '/api/profile-post',
+        type : 'POST',
+        dataType : 'json',
+        //contentType :"application/json",
+        data :  {
+          user_name: getCookie('user_name'),
+        },
+        success: function(data){
+          console.log('接收');
+          setUserInfo($, data);
+        },
+        error: function(){
+          console.log('失败');
+        }
+      })
+
+      var form = layui.form;
+      //监听提交
+      form.on('submit(modifyRoomTitle)', function(data){
+        layui.$.ajax({
+        url : '/api/modifyRoomTitle-post',
+        type : 'post',
+        dataType : 'json',
+        //contentType :"application/json",
+        data : {
+          user_name: getCookie('user_name'),
+          new_room_title: data.field['new_room_title']
+        },
+        success: function(data){
+          console.log('接收');
+          if(data.update_status)
+            layer.msg('修改成功');
+          else
+            layer.msg('修改失败');
+          },
+          error: function(){
+            console.log('失败');
+            layer.msg('修改失败');
+          }
+        })
+        return false;
+      });
+
+    })
+  </script>
+</body>
+</html>
