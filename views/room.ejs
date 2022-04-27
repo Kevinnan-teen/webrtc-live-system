@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>webrtc-live-system</title>
+<link rel="stylesheet" href="./layui/css/layui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="flv.min.js"></script>
+</head>
+<body>
+
+<div class="">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">LIVE SYSTEM</a>
+          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>  
+            </ul>
+          </div> -->
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="user_signin">未登录</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/signin">sign in</a></li>
+              <li><a class="dropdown-item" href="/profile">profile</a></li>
+              <li><a class="dropdown-item" href="/api/signout" id="signout_a">sign out</a></li>              
+            </ul>
+          </li>
+        </div>
+      </nav>
+    <!-- 内容主体区域 -->
+    <div class="content" style="padding-top: 5%">
+      <div class="container" id="special-room-info" style="display: none;">
+        <h2 id="room_title"></h2>
+        <h4 id="user_name"></h4>
+        <div class="row">
+          <div class="col-sm-9 col-md-9 col-lg-9">
+            <video id="videoElement" width="100%" height="100%" controls autoplay muted></video>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <div class="msg-div" style="height:600px; overflow-x: hidden;overflow-y: auto;padding: 3px;
+                                        border-style:solid; border-width:1px; border-color:black;">
+            </div>
+            <div class="row">
+              <div class="col-8">                
+                <input type="text" class="form-control" id="msg">
+              </div>
+              <div class="col-4">
+                <button onclick="sendMsg()" class="btn btn-success" id="sendMsgBtn">发送</button>
+              </div>
+            </div>
+            <!-- <button onclick="add()" class="btn btn-success">发送</button> -->
+          </div>                    
+        </div>  
+        <div class="row">
+          <div class="col-sm-9 col-md-9 col-lg-9">
+            <div id="userList-div">
+            </div>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+          </div>                    
+        </div>           
+      </div>      
+    </div>    
+</div>
+
+<script src="./layui/layui.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/room_utils.js"></script>
+  <script>
+    var input = document.getElementById("msg");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+          event.preventDefault();
+          document.getElementById("sendMsgBtn").click();
+      }
+    });
+    layui.use(['form', 'jquery'], function(){
+      layui.$('#signout_a').click(function(event){
+        document.cookie="user_name=未登录";
+      })      
+
+      layui.$.ajax({
+        url : '/api/specialRoomInfo-post',
+        type : 'post',
+        dataType : 'json',
+        data: {
+          room_id: getUrlParam('room_id')
+        },
+        success: function(data){
+          console.log('接收');          
+          var room_data = data.room_data;
+          var httpflv_link = 'http://' + window.location.host.split(':')[0] + ':8070/' + room_data.room_id +
+                             '/' + room_data.user_id.toString() + '.flv';
+          console.log(httpflv_link);
+          if(Object.keys(data.room_data).length){     
+            layui.$('#room_title').html(data.room_data.room_title);
+            layui.$('#user_name').html(data.room_data.user_name);
+            layui.$('#special-room-info').show();
+            flvSupport(httpflv_link);
+          }
+          else{
+            console.log('该房间目前没有开放');
+            layui.$('#special-room-info').show();
+            layui.$('#special-room-info').children().remove();
+            layui.$('#special-room-info').append('<h1>该房间目前没有开放</h1>');
+          }
+        },
+        error: function(){
+          console.log('失败');
+        }
+      })       
+    })
+
+    document.getElementById('user_signin').innerHTML = getCookie('user_name');
+
+  </script>
+</body>
+</html>
