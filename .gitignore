@@ -1,2 +1,4 @@
 node_modules/
 models/data.db
+public/flv.min.js
+public/flv.min.js.map
