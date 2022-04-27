@@ -135,26 +135,38 @@
           room_data = data.room_data;
           console.log(room_data);
           if(room_data.length){
-            var row_nums = room_data.length % 3 + 1;
+            console.log(room_data.length);
+            var row_nums;
+            if(room_data.length % 3)
+              row_nums = parseInt(room_data.length / 3) + 1;
+            else
+              row_nums = parseInt(room_data.length / 3);
+            console.log(row_nums);
             var room_info = '';
             var room_link = '/room=';          
             var child_nums = 0;
             for(var i = 0; i < row_nums; i++){
-              room_info += '<br><div class="row">';
+              room_info += '<div class="row">';
               for(var j = 0; j < 3; j++){
                 if(child_nums === room_data.length)
                   break;
                 child_nums += 1;
+                console.log(room_data[i*3+j].user_name, child_nums);
                 var rand = Math.floor(Math.random()*img_links.length);
+                var room_title;
+                if(room_data[i*3+j]['room_title'])
+                  room_title = room_data[i*3+j]['room_title'];
+                else
+                  room_title = 'xxx';
                 room_link  = '/room?room_id=';
                 room_link  += room_data[i*3+j]['room_id'];
                 room_info += '<div class="col-sm-4"> <a href="' + room_link + '">' + '<img src="' +
                             img_links[rand] + '"' + 'class="rounded-3"' + 'style="width: 300px; height: 220px;"> </img> </a>' +
                             '<h4>' + room_data[i*3+j]['user_name'] + '</h4>';
                 if(room_data[i*3+j]['room_title'])
-                  room_info += '<p>' + room_data[i*3+j]['room_title'] + '<p> </div>';
+                  room_info += '<p>' + room_title  + '<p> </div>';
               }
-              room_info += '</div><br>';
+              room_info += '</div></div><br>';
             }
             console.log(room_info);
             layui.$('#room-info').children().remove();
