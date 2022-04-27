@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>webrtc-live-system</title>
+<link rel="stylesheet" href="./layui/css/layui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .site-doc-icon li .layui-anim {
+    width: 150px;
+    height: 150px;
+    line-height: 150px;
+    margin: 0 auto 10px;
+    text-align: center;
+    background-color: #009688;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 50%;
+}
+
+</style>
+</head>
+<body>
+
+<div class="">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">LIVE SYSTEM</a>
+          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>  
+            </ul>
+          </div> -->
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="user_signin">未登录</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/signin">sign in</a></li>
+              <li><a class="dropdown-item" href="/profile">profile</a></li>
+              <li><a class="dropdown-item" href="/api/signout" id="signout_a">sign out</a></li>              
+            </ul>
+          </li>
+        </div>
+      </nav>
+    <!-- 内容主体区域 -->
+      <div style="padding-top: 5%; padding-right:20%; padding-left:20%;">
+          <div class="container-fluid text-center" id="room-info">
+          </div>        
+      </div>
+
+  <!-- <h1 style="background-color: #8080c0; color: white;"></h1> -->
+
+</div>
+
+<script src="./layui/layui.js"></script>
+  <script>
+    var img_links = [
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/yjwj_1.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/yjwj_2.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/yjwj_3.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/yjwj_4.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/yjwj_5.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/yjwj_6.jpg",      
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/lol_2.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/lol_3.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/wzry_1.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1535099148_664076.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1535099150_791605.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1597903350_217982.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1597903350_790811.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1597903351_699588.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1605335808_958642.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1605335808_298597.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/379-1P6121I044-50.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/379-1P6121I046.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/379-1P6121I047.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1644391028_688242.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1644391029_230114.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1644391028_670487.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1624932642_668615.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1624932643_643914.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1624932643_632743.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1605085573_784408.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1605085573_997055.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1605085574_721510.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1605085574_635377.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/244-130GGG452.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/244-130GGG457.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/244-130GGG511.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1590051227_681796.jpg" ,
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1590051227_741102.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1597994260_409683.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1597994261_138503.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1614662515_568108.jpg",
+      "https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/1614662515_820094.jpg"
+    ]
+
+    function getCookie(cname)
+    {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0; i<ca.length; i++) 
+      {
+        var c = ca[i].trim();
+        if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+      }
+      return "";
+    }
+    layui.use([], function(){
+      $ = layui.$;
+      $('#signout_a').click(function(event){
+        document.cookie="user_name=未登录";
+      })
+
+      layui.$.ajax({
+        url : '/api/roomInfo-get',
+        type : 'GET',
+        dataType : 'json',
+        success: function(data){
+          console.log('接收');
+          room_data = data.room_data;
+          console.log(room_data);
+          if(room_data.length){
+            var row_nums = room_data.length % 3 + 1;
+            var room_info = '';
+            var room_link = '/room=';          
+            var child_nums = 0;
+            for(var i = 0; i < row_nums; i++){
+              room_info += '<br><div class="row">';
+              for(var j = 0; j < 3; j++){
+                if(child_nums === room_data.length)
+                  break;
+                child_nums += 1;
+                var rand = Math.floor(Math.random()*img_links.length);
+                room_link  = '/room?room_id=';
+                room_link  += room_data[i*3+j]['room_id'];
+                room_info += '<div class="col-sm-4"> <a href="' + room_link + '">' + '<img src="' +
+                            img_links[rand] + '"' + 'class="rounded-3"' + 'style="width: 300px; height: 220px;"> </img> </a>' +
+                            '<h4>' + room_data[i*3+j]['user_name'] + '</h4>';
+                if(room_data[i*3+j]['room_title'])
+                  room_info += '<p>' + room_data[i*3+j]['room_title'] + '<p> </div>';
+              }
+              room_info += '</div><br>';
+            }
+            console.log(room_info);
+            layui.$('#room-info').children().remove();
+            layui.$('#room-info').append(room_info);   
+          }else{
+            layui.$('#room-info').children().remove();
+            layui.$('#room-info').append('<h1>请先登录</h1>');
+          }
+        },
+        error: function(){
+          console.log('失败');
+        }
+      })
+
+    })
+    document.getElementById('user_signin').innerHTML = getCookie('user_name');
+  </script>
+</body>
+</html>
