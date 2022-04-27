@@ -1,0 +1,153 @@
+<!-- 参考：https://blog.csdn.net/java_hzp/article/details/86661694 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <style type="text/css">
+      .container{
+        width: 420px;
+        height: 250px;
+      min-height: 230px;  
+      max-height: 320px;  
+      position: absolute;   
+      top: 0;  
+      left: 0;  
+      bottom: 0;  
+      right: 0;  
+      margin: auto;  
+      padding: 20px;  
+      z-index: 130;  
+      border-radius: 8px;  
+      background-color: #fff;  
+      box-shadow: 0 3px 18px rgba(100, 0, 0, .5); 
+      font-size: 16px;
+      }
+
+      .layui-input{
+        border-radius: 5px;
+        width: 300px;
+        height: 40px;
+        font-size: 15px;
+      }
+      .layui-form-item{
+        margin-left: -20px;
+      }
+  #logoid{ 
+    margin-top: -16px;
+      padding-left:150px; 
+      padding-bottom: 15px;
+  }
+  .layui-btn{
+    margin-left: -50px;
+    border-radius: 5px;
+        width: 350px;
+        height: 40px;
+        font-size: 15px;
+  }
+  .verity{
+    width: 120px;
+  }
+  .font-set{
+    font-size: 13px;
+    text-decoration: none; 
+    margin-left: 120px;
+  }
+  a:hover{
+    text-decoration: underline; 
+  }
+
+    </style>
+</head>
+<body style="background-color: darkslategray;">
+  <form class="layui-form" action="" method="post">
+    <div class="container">
+      <div class="layui-form-mid layui-word-aux">
+        <img id="logoid" src="https://cdn.jsdelivr.net/gh/Kevinnan-teen/CDN/image-20220407220314253.png" height="35">    				
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+          <input type="text" name="username" required  lay-verify="usernameVerify" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
+        <div class="layui-input-inline">
+          <input type="password" name="password" required lay-verify="passwordVerify" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>        
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">邀请码</label>
+        <div class="layui-input-block">
+          <input type="text" name="invitation_code" required  lay-verify="invitationcodeVerify" placeholder="请输入邀请码" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" lay-submit lay-filter="formDemo">注册</button>	     
+        </div>        
+      </div>
+    </div>
+  </form>
+<script type="text/javascript" src="layui/layui.js"></script>
+    <script>
+      layui.use(['form'], function(){
+        var form = layui.form;
+        form.verify({
+          usernameVerify: function(value, item){
+            if(!value.length)
+              return '用户名不能为空';
+            if(value.length > 20)
+              return '用户名不能超过20个字符';
+          },
+
+          passwordVerify: function(value, item){
+            if(!value.length)
+              return '密码不能为空';
+            if(value.length < 6)
+              return '密码不能少于6个字符';
+            if(value.length > 25)
+              return '密码不能超过25个字符';
+          },
+
+          invitationcodeVerify: function(value, item){
+            if(!value.length)
+              return '邀请码不能为空';
+            if(value != 'yygq')
+              return '请输入有效邀请码';
+          } 
+        });
+
+        form.on('submit(formDemo)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+            layui.$.ajax({
+                url : '/api/signup-post',
+                type : 'post',
+                dataType : 'json',
+                contentType :"application/json",
+                data :  JSON.stringify(data.field),
+                success: function(data){
+                  console.log('接收');
+                  if(data.signup_status){
+                    console.log('注册成功');
+                    layer.msg('注册成功');
+                    window.location.href = '/signin';
+                  }
+                  else{
+                    console.log('注册失败');
+                    layer.msg('用户名已被注册');
+                  }
+                },
+                error: function(){
+                  console.log('失败');                        
+                }
+            })
+            return false;
+        });
+    });  
+</script>
+</body>
+</html>
