@@ -4,18 +4,4 @@
 
 
 
-### 项目演示
-
-![signup](./imgs/signup.png)
-
-![signin](./imgs/signin.png)
-
-![](./imgs/profile.png)
-
-![](./imgs/profile_2.png)
-
-![](./imgs/apply_anchor.png)
-
-![index](./imgs/index.png)
-
-![](./imgs/room.png)
+[项目演示](./doc/demo.md)
