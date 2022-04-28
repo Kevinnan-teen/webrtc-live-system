@@ -15,23 +15,6 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">LIVE SYSTEM</a>
-          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>  
-            </ul>
-          </div> -->
-
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="user_signin">未登录</a>
             <ul class="dropdown-menu">
@@ -145,6 +128,20 @@
                     </div>
                 </div>
                 <br>
+                <div class="row align-items-start" id="rtmp_url_div" style="display: none;">
+                  <div class="col">
+                  </div>
+                  <div class="col", id="">
+                    RTMP 推流地址
+                  </div>
+                  <div class="col">
+                  </div>
+                  <div class="col" id="rtmp_url">
+                  </div>
+                  <div class="col">
+                  </div>
+                </div>
+                <br>
                 <br>
                 <div id="form_div" style="display: none; width: 100%;">
                     <form class="layui-form" action="">
@@ -193,10 +190,14 @@
         $('#apply_anchor_button_div').hide();
         $('#room_id_div').show();
         $('#room_title_div').show();
+        $('#rtmp_url_div').show();
         $('#form_div').show();
+        
 
         document.getElementById('room_id').innerHTML    = data['room_id'];
         document.getElementById('room_title').innerHTML = data['room_title'];
+        document.getElementById('rtmp_url').innerHTML   = 'rtmp://' + window.location.host.split(':')[0] + '/' +
+                                                          data['room_id'] + '/' + data['user_id'];
 
       }
       else{
