@@ -1,15 +1,15 @@
 ### 项目演示
 
-![](../imgs/signup.png)
+![](./imgs/signup.png)
 
-![](../imgs/signin.png)
+![](./imgs/signin.png)
 
-![](../imgs/profile.png)
+![](./imgs/profile.png)
 
-![](../imgs/profile_2.png)
+![](./imgs/profile_2.png)
 
-![](../imgs/apply_anchor.png)
+![](./imgs/apply_anchor.png)
 
-![](../imgs/index.png)
+![](./imgs/index.png)
 
-![](../imgs/room.png)
+![](./imgs/room.png)
