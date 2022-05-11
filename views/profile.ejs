@@ -84,7 +84,6 @@
                     </div>
                 </div>
                 <br>
-                
                 <div class="row align-items-start" id="apply_anchor_button_div" style="display: none;">
                     <div class="col">
                     </div>
@@ -142,6 +141,21 @@
                   </div>
                 </div>
                 <br>
+                <div class="row align-items-start" id="publish_webrtc_div" style="display: none;">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                        <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="publish_webrtc_button">WebRTC推流</button>
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                      
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <br>
                 <br>
                 <div id="form_div" style="display: none; width: 100%;">
                     <form class="layui-form" action="">
@@ -191,6 +205,7 @@
         $('#room_id_div').show();
         $('#room_title_div').show();
         $('#rtmp_url_div').show();
+        $('#publish_webrtc_div').show();
         $('#form_div').show();
         
 
@@ -198,12 +213,17 @@
         document.getElementById('room_title').innerHTML = data['room_title'];
         document.getElementById('rtmp_url').innerHTML   = 'rtmp://' + window.location.host.split(':')[0] + '/' +
                                                           data['room_id'] + '/' + data['user_id'];
+        $('#publish_webrtc_button').click(function(event){
+          window.location.href = '/publish_webrtc?room_id=' + data['room_id'] + '&user_id=' + data['user_id'];
+          // window.location.href = '/publish_webrtc';
+        });
 
       }
       else{
         $('#apply_anchor_button_div').show();
         $('#room_id_div').hide();
         $('#room_title_div').hide();
+        $('#publish_webrtc_div').hide();
         $('#form_div').hide();
       }
     }
