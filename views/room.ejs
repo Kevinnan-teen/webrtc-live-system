@@ -57,7 +57,24 @@
           </div>
           <div class="col-sm-3 col-md-3 col-lg-3">
           </div>                    
-        </div>           
+        </div>          
+        <!--<button class="btn btn-success" id="testBtn">测试</button>-->
+        <br>
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-8">
+            <video id="webrtc_video" width=100% height="100%" controls autoplay
+                                                muted></video>
+          </div>
+          <div class="col-4">
+            <div id="webrtc_status"></div>
+          </div>
+        </div>
+        <div>
+          <div id="video_type">HTTP-FLV</div>
+          <button class="btn btn-success" id="changeBtn">切换</button>
+        </div>
       </div>      
     </div>    
 </div>
@@ -66,7 +83,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/chat.js"></script>
 <script src="js/room_utils.js"></script>
-  <script>
+<script>
     var input = document.getElementById("msg");
     input.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
@@ -90,13 +107,14 @@
           console.log('接收');          
           var room_data = data.room_data;
           var httpflv_link = 'http://' + window.location.host.split(':')[0] + ':8070/' + room_data.room_id +
-                             '/' + room_data.user_id.toString() + '.flv';
+            '/' + room_data.user_id.toString() + '.flv';
+          sessionStorage.setItem('httpflv_link', httpflv_link);
           console.log(httpflv_link);
           if(Object.keys(data.room_data).length){     
             layui.$('#room_title').html(data.room_data.room_title);
             layui.$('#user_name').html(data.room_data.user_name);
             layui.$('#special-room-info').show();
-            flvSupport(httpflv_link);
+            //flvSupport(httpflv_link);
           }
           else{
             console.log('该房间目前没有开放');
@@ -112,7 +130,7 @@
     })
 
     document.getElementById('user_signin').innerHTML = getCookie('user_name');
-
-  </script>
+</script>
+<script src="js/room_webrtc_compiled.js"></script>
 </body>
 </html>
