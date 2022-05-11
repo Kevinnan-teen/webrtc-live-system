@@ -29,8 +29,8 @@
 
 - 用户注册、登录
 - 用户信息管理（查看用户 ID、用户名、账号创建时间），申请成为主播
-- 直播管理（直播间ID、直播 RTMP 推流地址）
-- 直播间（实时流媒体、弹幕聊天）
+- 直播管理（直播间ID、RTMP 推流、WebRTC 推流）
+- 直播间（实时流媒体支持 HTTP-FLV 和 WebRTC、弹幕聊天）
 
 #### 项目演示
 
@@ -42,5 +42,5 @@
 
 #### ToDo
 
+- [x] 基于 nodejs + webSocket 实现 WebRTC 信令服务器，获取 WebRTC 流媒体数据并播放
 - [ ] 使用 NoSQL 数据库（如 Mangodb）存储历史消息
-- [ ] 基于 nodejs + webSocket 实现 WebRTC 信令服务器，获取 WebRTC 流媒体数据并播放
