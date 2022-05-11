@@ -16,6 +16,15 @@
 
 - 在浏览器端用`http://localhost:3000`访问项目主页
 
+- webrtc 使用 nodejs 实现，浏览器 js 要调用 nodejs 的模块只能现将符合 CommonJS 的 Nodejs 代码转换为浏览器端可以调用的 js 代码，这里用到前端模块化工具`Browserify`。在在调试位于`public/js`目录下的 WebRTC 模块时，每次修改后需执行以下命令转换为浏览器可以调用的 js 代码。
+
+  ```sh
+  // 直播间页面支持 webrtc
+  $ browserify room_webrtc.js > room_webrtc_compiled.js
+  // webrtc 推流页面
+  $ browserify publish_webrtc.js > publish_webrtc_compiled.js
+  ```
+
 #### 功能介绍
 
 - 用户注册、登录
