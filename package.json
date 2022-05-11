@@ -22,6 +22,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "ejs": "^3.1.6",
+    "events": "^3.3.0",
     "flv.js": "^1.6.2",
     "knex": "^2.0.0",
     "koa": "^2.13.4",
@@ -32,6 +33,7 @@
     "koa-static": "^5.0.0",
     "koa-views": "^8.0.0",
     "passport-local": "^1.0.0",
+    "sdp-transform": "^2.14.1",
     "socket.io": "^4.4.1",
     "sqlite3": "^5.0.2"
   }
