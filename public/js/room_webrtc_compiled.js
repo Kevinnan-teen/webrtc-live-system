@@ -1296,12 +1296,30 @@ class Client extends EnhancedEventEmitter
         {
             this._cameraStream = new StreamManager();
             return await this._cameraStream.Open('camera');
+            //return await this._cameraStream.Open('screen');
         } catch (error) {
             console.log("create stream error:", error);
             throw new Error("create stream error:" + error);
         }
     }
 
+    async OpenScreen()
+    {
+        if (this._screenStream)
+        {
+            throw Error("the screen is opened");
+        }
+
+        try
+        {
+            this._screenStream = new StreamManager();
+            return await this._screenStream.Open('screen');
+        } catch (error) {
+            console.log("create stream error:", error);
+            throw new Error("create stream error:" + error);
+        }
+    }
+    
     /*
     return: {"users":[{"uid":"11111"}, {"uid":"22222"}]}
     */
@@ -1347,9 +1365,154 @@ class Client extends EnhancedEventEmitter
 
         return respData;
     }
+    
+    async PublishScreen({videoEnable, audioEnable}){
+        if (!this._connected)
+        {
+            throw new Error('websocket is not ready');
+        }
 
-    async PublishCamera({videoEnable, audioEnable})
-    {
+        if (!this._screenStream)
+        {
+            throw new Error('screen does not init');
+        }
+
+        if (!videoEnable && !audioEnable)
+        {
+            throw new Error('video and audio are not enable');
+        }
+
+        var mediaTracks = [];
+        if (videoEnable)
+        {
+            mediaTracks.push(this._screenStream.GetVideoTrack());
+        }
+        if (audioEnable)
+        {
+            mediaTracks.push(this._screenStream.GetAudioTrack());
+        }
+
+        var sendCameraPc = null;
+        var offerInfo;
+        try {
+            sendCameraPc = new PCManager();
+            sendCameraPc.CreatePeerConnection('send');
+            sendCameraPc.SetType('screen');
+            offerInfo = await sendCameraPc.AddSendMediaTrack(mediaTracks);
+        } catch (error) {
+            throw error;
+        }
+
+        var data = {
+            'roomId': this._roomId,
+            'uid': this._uid,
+            'sdp' : offerInfo.offSdp
+        }
+        var respData;
+
+        try {
+            console.log("send publish request:", data);
+            respData = await this.ws.request('publish', data);
+        } catch (error) {
+            console.log("send publish message exception:", error)
+            throw error
+        }
+        console.log("Publish response message:", respData);
+
+        var answerSdp = respData['sdp'];
+        var peerConnectionId = respData['pcid'];
+
+        sendCameraPc.SetId(peerConnectionId);
+
+        await sendCameraPc.SetSendAnswerSdp(answerSdp);
+
+        var answerSdpObj = SdpTransformer.parse(answerSdp);
+        for (const item of answerSdpObj.media)
+        {
+            if (item.type == 'video')
+            {
+                this._screenVideoMid = item.mid;
+            }
+            else if (item.type == 'audio')
+            {
+                this._screenAudioMid = item.mid;
+            }
+            else
+            {
+                throw new Error("the sdp type is unkown:", item.type);
+            }
+        }
+        this._sendPCMap.set(peerConnectionId, sendCameraPc);
+        return;
+    }
+
+    async UnPublishScreen({videoDisable, audioDisable}){
+        if (!this._connected)
+        {
+            throw new Error('websocket is not ready');
+        }
+
+        if (!this._screenStream)
+        {
+            throw new Error('screen does not init');
+        }
+
+        if (!videoDisable && !audioDisable)
+        {
+            throw new Error('video and audio are not disable');
+        }
+
+        var removeMids = [];
+        if (videoDisable)
+        {
+            removeMids.push(this._screenVideoMid);
+        }
+        if (audioDisable)
+        {
+            removeMids.push(this._screenAudioMid);
+        }
+
+        var sendPC = null;
+
+        for (var pc of this._sendPCMap.values())
+        {
+            if (pc.GetType() == 'screen')
+            {
+                sendPC = pc;
+                break;
+            }
+        }
+        if (sendPC == null)
+        {
+            throw new Error("fail to find camera");
+        }
+        sendPC.removeSendTrack(removeMids);
+
+        sendPC.ClosePC();
+
+        this._sendPCMap.delete(sendPC.GetId());
+
+        //send unpublish request
+        var data = {
+            'roomId': this._roomId,
+            'uid': this._uid,
+            'pcid' : sendPC.GetId()
+        }
+
+        var respData;
+        try {
+            console.log("unpublish request: ", data);
+            respData = await this.ws.request('unpublish', data);
+        } catch (error) {
+            console.log("send unpublish message exception:", error)
+            throw error
+        }
+        console.log("UnPublish response message:", respData);
+
+        return respData;
+    }
+
+    async PublishCamera({videoEnable, audioEnable}){
         if (!this._connected)
         {
             throw new Error('websocket is not ready');
@@ -1434,8 +1597,7 @@ class Client extends EnhancedEventEmitter
         return;
     }
 
-    async UnPublishCamera({videoDisable, audioDisable})
-    {
+    async UnPublishCamera({videoDisable, audioDisable}){
         if (!this._connected)
         {
             throw new Error('websocket is not ready');
@@ -2376,8 +2538,8 @@ class StreamManager extends EnhancedEventEmitter
         this._mediastream = null;
         this._videoTrack  = null;
         this._audioTrack  = null;
-        this._width      = 1280;
-        this._height     = 720;
+        this._width      = 1920;
+        this._height     = 1080;
         this._vBitrate   = 1000*1000;
         this._channel    = 2;
         this._sampleRate = 48000;
@@ -2451,7 +2613,7 @@ class StreamManager extends EnhancedEventEmitter
         this._videoTrack = ms.getVideoTracks()[videoTracksNum - 1];
         this._audioTrack = ms.getAudioTracks()[audioTracksNum - 1];
         this._mediastream.addTrack(this._videoTrack);
-        this._mediastream.addTrack(this._audioTrack);
+        //this._mediastream.addTrack(this._audioTrack);
 
         console.log("the media stream is open, type:", this._mediaType,
             "videoTrack:", this._videoTrack,
@@ -2473,6 +2635,7 @@ class StreamManager extends EnhancedEventEmitter
 };
 
 module.exports = StreamManager;
+
 },{"./EnhancedEventEmitter":7,"sdp-transform":3}],11:[function(require,module,exports){
 const EnhancedEventEmitter = require('./EnhancedEventEmitter');
 const MediaStatsInfo = require('./MediaStatsInfo');
@@ -2810,6 +2973,7 @@ AppController.prototype.ChangeClicked = async function(){
         var webrtc_video = document.getElementById("webrtc_video");
         webrtc_video.pause();
         webrtc_video.removeAttribute('src');
+        webrtc_video.srcObject = null;
         //webrtc_video.load();
 
         if (flvjs.isSupported()) {
