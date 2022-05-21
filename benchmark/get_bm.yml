@@ -1,0 +1,10 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    # 60 秒内创建20个虚拟用户
+    - duration: 60
+      arrivalRate: 100
+scenarios:
+  - flow:
+    - get:
+        url: "/room?room_id=2001"

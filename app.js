@@ -52,23 +52,23 @@ io.on("connection", socket => {
         users.removeUser(socket.id);
         users.addUser(socket.id, param.user_name, param.room_id);
             
-        console.log(users.getUserList(param.room_id));
+        //console.log(users.getUserList(param.room_id));
         io.to(param.room_id).emit('updateUserList', users.getUserList(param.room_id));
 
-        callback();
+        //callback();
     })
 
     socket.on('createMessage', (message, callback) => {
         var user = users.getUser(socket.id);
-        
+        console.log(user);
         io.to(user.room).emit('newMessage', message);
 
-        callback();
+        //callback();
     })
 
     socket.on('disconnect', () => {
         var user = users.removeUser(socket.id);
-        io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+        //io.to(user.room).emit('updateUserList', users.getUserList(user.room));
         console.log('user disconnected');
     });
 

@@ -1,0 +1,22 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 1000
+
+scenarios:
+  - name: My sample scenario
+  - engine: "socketio"
+    flow:
+      # wait for the WebSocket upgrade (optional)
+      - think: 1
+
+      # basic emit
+      - emit:
+          channel: "join"
+          data:
+            room_id: "2000"
+            user_name: "nachr"
+      - emit:
+          channel: "createMessage"
+          data: "12222222222222222133fasdfasdfsadfkjsadlfjsadlkfjfafsad"
