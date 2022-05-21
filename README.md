@@ -1,6 +1,21 @@
-# webrtc 流媒体直播系统
+## webrtc 流媒体直播系统
 
 基于 webrtc 的流媒体直播系统。前端用 Layui + Bootstrap 构建，后端用 nodejs。功能主要包含 WebRTC 和 RTMP+HTTP-FLV 流媒体直播以及直播间内 group chat。
+
+#### 项目演示
+
+[项目演示](./doc/demo.md)
+
+#### 功能介绍
+
+- 用户注册、登录
+- 用户信息管理（查看用户 ID、用户名、账号创建时间），申请成为主播
+- 直播管理（直播间ID、RTMP 推流、WebRTC 推流）
+- 直播间（实时流媒体支持 HTTP-FLV 和 WebRTC、弹幕聊天）
+
+#### 实现细节
+
+- TO DO
 
 #### 调试代码（建议本地安装 nodejs 环境）
 
@@ -24,21 +39,6 @@
   // webrtc 推流页面
   $ browserify publish_webrtc.js > publish_webrtc_compiled.js
   ```
-
-#### 功能介绍
-
-- 用户注册、登录
-- 用户信息管理（查看用户 ID、用户名、账号创建时间），申请成为主播
-- 直播管理（直播间ID、RTMP 推流、WebRTC 推流）
-- 直播间（实时流媒体支持 HTTP-FLV 和 WebRTC、弹幕聊天）
-
-#### 项目演示
-
-[项目演示](./doc/demo.md)
-
-#### 实现细节
-
-- TO DO
 
 #### ToDo
 
